@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Roboto;
+  background-color: rgb(31, 30, 28);
+}
+
+a {
+  color: #ffb403;
+  transition: all 0.3s ease;
+}
+
+a:hover,
+a:focus {
+  color: white;
+}
