@@ -159,7 +159,12 @@
 
 <main>
   <header>
-    <h1>Real Fake Synergy NFTs</h1>
+    <div class="title">
+      <h1>Real Fake Synergy NFTs</h1>
+      <button class="btn" on:click={() => approve()}
+        >Approve rGLD before mint NFT</button
+      >
+    </div>
 
     <section class="intro">
       <p>
@@ -185,6 +190,8 @@
         Another big part of mining natural resources is creating jewelry. But
         now you can <mark>create jewelry with synthetic gold!</mark>
       </p>
+      <br />
+      <p><em>(Click a card to take a closer look at it!)</em></p>
     </section>
 
     <div class="showcase">
@@ -204,38 +211,18 @@
 
       <div>
         <div class="mint-cube-block">
-          <div class="input-burn">
-            <input
-              class="mint-button cube cube-input"
-              type="number"
-              bind:value={cube_gold}
-            />
-            Select Cube weight in oz ( >= 1000 )
-          </div>
-          <button
-            class="mint-button cube mint-cube"
-            on:click={() => mintCard(cube_gold)}>Mint Cube</button
-          >
-          <!-- <button class="mint-button cube" on:click={() => approve()}
-            >Approve</button
-          > -->
+          <input class="inpt" type="number" bind:value={cube_gold} />
+          <button class="btn" on:click={() => mintCard(cube_gold)}>mint</button>
+        </div>
+        <div class="mint-cube-help">
+          <mark>Select Cube weight in oz ( >= 1000 )</mark>
         </div>
       </div>
     </div>
 
-    <section class="info">
-      <h2><em>(Click a card to take a closer look at it!)</em></h2>
-
-      <hr />
-
-      <div>
-        <button class="mint-button cube approve" on:click={() => approve()}
-          >Approve rGLD before mint NFT</button
-        >
-      </div>
-    </section>
+    <section class="info" />
   </header>
-
+  <hr />
   <h1>Precious Collectibles</h1>
   <p>
     We will create <mark>seasonal collections</mark> and
@@ -255,6 +242,7 @@
       biggest nature lover. <s>You can touch it</s> It looks nice.
     </li>
   </ul>
+
   <CardList>
     {#await getCards()}
       loading...
@@ -292,7 +280,7 @@
       <input
         type="number"
         bind:value={nft_to_burn}
-        class=" mint-button cube-input"
+        class="mint-button cube-input"
       />
       Select ID of your NFT to burn
     </div>
@@ -315,10 +303,6 @@
 <style>
   .cube {
     width: 100%;
-  }
-
-  .mint-cube-block {
-    margin-top: 15px;
   }
 
   .mint-block {
@@ -363,8 +347,6 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 30px;
-    max-width: 900px;
-    margin: auto;
   }
 
   header h2 {
@@ -395,14 +377,64 @@
     margin-top: 15px;
   }
 
-  .input-burn {
+  /* NEW CODE */
+  .title {
+    margin-top: 20px;
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
   }
 
   .mint-cube {
     margin-top: 10px;
+  }
+
+  .mint-cube-block {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .mint-cube-block button {
+    width: 48%;
+  }
+
+  .mint-cube-block input {
+    width: 48%;
+  }
+
+  .mint-cube-help {
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  .btn,
+  .inpt {
+    border: 2px solid #ffb403;
+    border-radius: 6px;
+    text-align: center;
+  }
+
+  .btn {
+    background-color: rgb(31, 30, 28);
+    border: 2px solid #ffb403;
+    border-radius: 6px;
+    color: white;
+    padding: 15px 32px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .inpt {
+    background-color: white;
+    color: black;
+    border: 2px solid #ffb403;
+    border-radius: 6px;
+  }
+
+  .intro {
+    max-width: 90%;
   }
 
   @media screen and (min-width: 600px) {
@@ -428,7 +460,7 @@
 
   .showcase {
     z-index: 99;
-    max-width: min(330px, 80vw);
+    max-width: min(280px, 80vw);
     margin: auto;
   }
 
@@ -470,6 +502,7 @@
     height: 1px;
     opacity: 0.25;
     margin: 1em -1em;
+    margin-bottom: 50px;
   }
 
   h1 sup {
@@ -485,7 +518,6 @@
   mark {
     background: #ffb403;
     color: black;
-    font-style: italic;
     font-weight: bold;
     padding-inline: 0.25em;
     border-radius: 3px;

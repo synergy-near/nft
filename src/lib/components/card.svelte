@@ -12,7 +12,7 @@
   export let back_img = "img\\back.png";
   export let img = "";
 
-	export let name = "";
+  export let name = "";
   export let number = "0";
   export let subtypes = "basic";
   export let supertype = "pokémon";
@@ -20,15 +20,17 @@
   export let gallery = false;
   export let showcase = false;
 
-	const back_loading = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAuCAYAAACmsnC6AAAANklEQVR42u3OMQEAAAQAMKJJJT4ZXJ4twTKqJ56lhISEhISEhISEhISEhISEhISEhISEhMTdAodwTxGtMFP/AAAAAElFTkSuQmCC";
-	const front_loading = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAuCAYAAACmsnC6AAAAN0lEQVR42u3OIQEAMAgAsNP/AkFfyIDCbAkWP6vfsZCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQ2BtyOnuhnmSZZAAAAABJRU5ErkJggg==";
-	
-  let img_base = img.startsWith('http') ? '' : "https://images.pokemontcg.io/";
-	let front_img = "";
+  const back_loading =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAuCAYAAACmsnC6AAAANklEQVR42u3OMQEAAAQAMKJJJT4ZXJ4twTKqJ56lhISEhISEhISEhISEhISEhISEhISEhMTdAodwTxGtMFP/AAAAAElFTkSuQmCC";
+  const front_loading =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAuCAYAAACmsnC6AAAAN0lEQVR42u3OIQEAMAgAsNP/AkFfyIDCbAkWP6vfsZCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQ2BtyOnuhnmSZZAAAAABJRU5ErkJggg==";
 
-	setTimeout(() => {
-		front_img = img;
-	}, 20 );
+  let img_base = img.startsWith("http") ? "" : "https://images.pokemontcg.io/";
+  let front_img = "";
+
+  setTimeout(() => {
+    front_img = img;
+  }, 20);
 
   let thisCard;
   let rotator;
@@ -49,8 +51,8 @@
 
   const interact = (e) => {
     if (document.hasFocus() && $activeCard && $activeCard !== thisCard) {
-			return interacting = false;
-		}
+      return (interacting = false);
+    }
 
     interacting = true;
 
@@ -117,23 +119,23 @@
 
   const activate = (e) => {
     const isTouch = e.pointerType === "touch";
-		const isKeyboard = e.type === "keyup";
-		if ( isKeyboard ) {
-				if ( [" ","Enter"].includes(e.key) && $activeCard !== thisCard ) {
-					$activeCard = thisCard;
-					resetBaseOrientation();
-				} else {
-					$activeCard = undefined;
-				}
-		} else {
-			if (!isTouch && $activeCard && $activeCard === thisCard) {
-				// deactivate on desktop, if already active
-				$activeCard = undefined;
-			} else {
-				$activeCard = thisCard;
-				resetBaseOrientation();
-			}
-		}
+    const isKeyboard = e.type === "keyup";
+    if (isKeyboard) {
+      if ([" ", "Enter"].includes(e.key) && $activeCard !== thisCard) {
+        $activeCard = thisCard;
+        resetBaseOrientation();
+      } else {
+        $activeCard = undefined;
+      }
+    } else {
+      if (!isTouch && $activeCard && $activeCard === thisCard) {
+        // deactivate on desktop, if already active
+        $activeCard = undefined;
+      } else {
+        $activeCard = thisCard;
+        resetBaseOrientation();
+      }
+    }
   };
 
   const deactivate = (e) => {
@@ -295,31 +297,30 @@
         springBackground.stiffness = s;
         springBackground.damping = d;
 
-				if ( document.hasFocus() ) {
-					let circle = setInterval(function () {
-						r += 0.05;
-						springRotate.set({ x: Math.sin(r) * 25, y: Math.cos(r) * 25 });
-						springGlare.set({
-							x: 55 + Math.sin(r) * 55,
-							y: 55 + Math.cos(r) * 55,
-							o: 0.8,
-						});
-						springBackground.set({
-							x: 20 + Math.sin(r) * 20,
-							y: 20 + Math.cos(r) * 20,
-						});
-					}, 20);
+        if (document.hasFocus()) {
+          let circle = setInterval(function () {
+            r += 0.05;
+            springRotate.set({ x: Math.sin(r) * 25, y: Math.cos(r) * 25 });
+            springGlare.set({
+              x: 55 + Math.sin(r) * 55,
+              y: 55 + Math.cos(r) * 55,
+              o: 0.8,
+            });
+            springBackground.set({
+              x: 20 + Math.sin(r) * 20,
+              y: 20 + Math.cos(r) * 20,
+            });
+          }, 20);
 
-					setTimeout(() => {
-						clearInterval(circle);
-						interactEnd(0);
-					}, 4000);
-				} else {
-					interacting = false;
-        	active = false;
-					return;
-				}
-
+          setTimeout(() => {
+            clearInterval(circle);
+            interactEnd(0);
+          }, 4000);
+        } else {
+          interacting = false;
+          active = false;
+          return;
+        }
       }, 2000);
     }
   });
@@ -349,26 +350,26 @@
       on:pointermove={interact}
       on:mouseout={interactEnd}
       on:blur={deactivate}
-			aria-label="Expand"
-			title="Click to expand"
+      aria-label="Expand"
+      title="Click to expand"
       tabindex="0"
     >
       <img
         class="card__back"
-				src="{back_img}"
+        src={back_img}
         alt="The back of a Pokemon Card, a Pokeball in the center with Pokemon logo above and below"
-				loading="lazy"
+        loading="lazy"
         width="660"
         height="921"
       />
       <div class="card__front">
         <img
-					src="{front_img}"
+          src={front_img}
           alt="Front image of the {name} Pokemon Card"
           on:load={imageLoader}
           loading="lazy"
-					width="660"
-					height="921"
+          width="660"
+          height="921"
         />
         <Shine {subtypes} {supertype} />
         <Glare {subtypes} />
@@ -395,7 +396,7 @@
 
   .card {
     --radius: 7.55% / 5.5%;
-	  --back: #004177;
+    --back: #004177;
     --glow: #ffb403;
     z-index: calc(var(--s) * 100);
     transform: translate3d(0, 0, 0.1px);
@@ -434,13 +435,13 @@
     outline: none;
     transition: box-shadow 0.4s ease, outline 0.2s ease;
   }
-	button.card__rotator {
-		appearance: none;
-		-webkit-appearance: none;
-		border: none;
-		background: top;
-		padding: 0;
-	}
+  button.card__rotator {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: top;
+    padding: 0;
+  }
 
   .card.active .card__rotator {
     box-shadow: 0 0 10px 0px var(--glow), 0 0 10px 0px var(--glow),
@@ -467,12 +468,12 @@
 
   .card__rotator img {
     outline: 1px solid transparent;
-		aspect-ratio: auto;
-		height: auto;
+    aspect-ratio: auto;
+    height: auto;
   }
 
   .card__back {
-		background-color: var(--back);
+    background-color: var(--back);
     transform: rotateY(180deg);
     backface-visibility: visible;
   }
@@ -484,7 +485,7 @@
 
   .card__front {
     opacity: 1;
-    transition: opacity .33s ease-out;
+    transition: opacity 0.33s ease-out;
   }
 
   .loading .card__front {
