@@ -1,11 +1,12 @@
 import { defineConfig, loadEnv } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
+import mkcert from 'vite-plugin-mkcert'
 
 // https://vitejs.dev/config/
-export default defineConfig(({mode}) => {
+export default defineConfig(({ mode }) => {
 
   const venv = loadEnv(mode, process.cwd(), '')
-  const env = Object.keys(venv).filter((item) => item.startsWith("VITE_")).reduce((cur, key) => { return Object.assign(cur, { [key]: venv[key] })}, {}) ;
+  const env = Object.keys(venv).filter((item) => item.startsWith("VITE_")).reduce((cur, key) => { return Object.assign(cur, { [key]: venv[key] }) }, {});
 
   const htmlPlugin = () => {
     return {
@@ -19,8 +20,9 @@ export default defineConfig(({mode}) => {
   };
 
   return {
-    plugins: [svelte(), htmlPlugin()],
+    plugins: [svelte(), htmlPlugin(), mkcert()],
     server: {
+      https: true,
       watch: {
         usePolling: true
       }

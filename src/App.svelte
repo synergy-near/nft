@@ -1,36 +1,31 @@
 <script>
   import CardList from "./cards.svelte";
   import Card from "./lib/components/card.svelte";
-  import { BigNumber } from "ethers";
+  import { init } from "./lib/helpers/blockchain";
+  import ContractSDK from "./lib/helpers/contract";
+  import { ethers } from "ethers";
 
-  let basics;
-  let holos;
-  let galaxies;
-  let radiant;
-  let basicGallery;
-  let vee;
-  let veeUltra;
-  let veeAlt;
-  let veeMax;
-  let veeMaxAlt;
-  let veeStar;
-  let trainerHolo;
-  let rainbow;
-  let gold;
-  let veeGallery;
+  let basics, holos, galaxies, radiant, basicGallery, vee, veeUltra, veeAlt;
+  let veeMax, veeMaxAlt, veeStar, trainerHolo, rainbow, gold, veeGallery;
 
   let cube_gold = 1001;
   let nft_to_burn = 0;
 
-  let gold_balance = 0;
+  let gold_amount = "";
 
-  const NftContractAddress = "TSXNN3fFvM5jvQ28HVzMHfrLCsUjDBfgVG";
+  let sdk;
 
-  const getBalance = async () => {};
+  window.addEventListener("load", async () => {
+    let web3Modal = await init();
+    const provider = new ethers.providers.Web3Provider(web3Modal);
+    const signer = await provider.getSigner();
+
+    sdk = new ContractSDK(signer);
+    gold_amount = await sdk.getRgldBalance();
+    console.log("NUM:, ", gold_amount);
+  });
 
   const getCards = async () => {
-    let promiseArray = [];
-
     let cardFetch = await fetch("/data.json");
     let cards = await cardFetch.json();
     // window.cards = cards;
@@ -53,117 +48,14 @@
 
     return cards;
   };
-
-  const mintCard = async (amount) => {
-    console.log(amount);
-    const HexNftContractAddress =
-      window.tronWeb.address.toHex(NftContractAddress);
-
-    console.log(HexNftContractAddress);
-    console.log(window.tronWeb.address.fromHex(HexNftContractAddress));
-
-    const transaction =
-      await window.tronWeb.transactionBuilder.triggerSmartContract(
-        HexNftContractAddress,
-        "mintCard(uint256)",
-        {},
-        [
-          {
-            type: "uint256",
-            value: BigNumber.from("10").pow(18).mul(amount),
-          },
-        ],
-        window.tronWeb.address.toHex(window.tronWeb.defaultAddress.base58)
-      );
-
-    const signedTransaction = await window.tronWeb.trx.sign(
-      transaction.transaction
-    );
-
-    const result = await window.tronWeb.trx.sendRawTransaction(
-      signedTransaction
-    );
-
-    console.log(result);
-  };
-
-  const burnNFT = async (nft_to_burn) => {
-    const HexNftContractAddress =
-      window.tronWeb.address.toHex(NftContractAddress);
-
-    console.log(HexNftContractAddress);
-    console.log(window.tronWeb.address.fromHex(HexNftContractAddress));
-
-    const transaction =
-      await window.tronWeb.transactionBuilder.triggerSmartContract(
-        HexNftContractAddress,
-        "burnCard(uint256)",
-        {},
-        [
-          {
-            type: "uint256",
-            value: nft_to_burn,
-          },
-        ],
-        window.tronWeb.address.toHex(window.tronWeb.defaultAddress.base58)
-      );
-
-    const signedTransaction = await window.tronWeb.trx.sign(
-      transaction.transaction
-    );
-
-    const result = await window.tronWeb.trx.sendRawTransaction(
-      signedTransaction
-    );
-
-    console.log(result);
-  };
-
-  const approve = async () => {
-    const HexNftContractAddress =
-      window.tronWeb.address.toHex(NftContractAddress);
-
-    const HexGOLDContractAddress = window.tronWeb.address.toHex(
-      "TJ9acewm9Li9utY6GxK7e4qDvaRMY72uGk"
-    );
-
-    const transaction =
-      await window.tronWeb.transactionBuilder.triggerSmartContract(
-        HexGOLDContractAddress,
-        "approve(address,uint256)",
-        {},
-        [
-          {
-            type: "address",
-            value: HexNftContractAddress,
-          },
-          {
-            type: "uint256",
-            value: BigNumber.from("10").pow(18).mul(100000),
-          },
-        ],
-        window.tronWeb.address.toHex(window.tronWeb.defaultAddress.base58)
-      );
-
-    const signedTransaction = await window.tronWeb.trx.sign(
-      transaction.transaction
-    );
-
-    const result = await window.tronWeb.trx.sendRawTransaction(
-      signedTransaction
-    );
-
-    console.log(result);
-  };
 </script>
 
 <main>
   <header>
     <div class="title">
       <h1>Real Fake Synergy NFTs</h1>
-      <button class="btn" on:click={() => approve()}
-        >Approve rGLD before mint NFT</button
-      >
+      <w3m-core-button />
+      <w3m-modal />
     </div>
 
     <section class="intro">
@@ -191,7 +83,10 @@
         now you can <mark>create jewelry with synthetic gold!</mark>
       </p>
       <br />
-      <p><em>(Click a card to take a closer look at it!)</em></p>
+      <button class="btn" on:click={() => sdk.approve()}>
+        Approve rGLD before mint NFT</button
+      >
+      <p>Your gold reserves: {gold_amount}.</p>
     </section>
 
     <div class="showcase">
@@ -212,7 +107,9 @@
       <div>
         <div class="mint-cube-block">
           <input class="inpt" type="number" bind:value={cube_gold} />
-          <button class="btn" on:click={() => mintCard(cube_gold)}>mint</button>
+          <button class="btn" on:click={() => sdk.mintCard(cube_gold)}
+            >mint</button
+          >
         </div>
         <div class="mint-cube-help">
           <mark>Select Cube weight in oz ( >= 1000 )</mark>
@@ -243,6 +140,8 @@
     </li>
   </ul>
 
+  <p><em>Click a card to take a closer look at it!</em></p>
+
   <CardList>
     {#await getCards()}
       loading...
@@ -262,18 +161,18 @@
 
   <div class="mint-block">
     <div>
-      <p class="mint-button" on:click={() => mintCard(1)}>Mint Coin</p>
+      <p class="mint-button" on:click={() => sdk.mintCard(1)}>Mint Coin</p>
     </div>
     <div>
-      <p class="mint-button" on:click={() => mintCard(3)}>Mint Nugget</p>
+      <p class="mint-button" on:click={() => sdk.mintCard(3)}>Mint Nugget</p>
     </div>
     <div>
-      <p class="mint-button" on:click={() => mintCard(5)}>Mint Ingot</p>
+      <p class="mint-button" on:click={() => sdk.mintCard(5)}>Mint Ingot</p>
     </div>
   </div>
 
   <div class="burn-btn">
-    <button class="mint-button" on:click={() => burnNFT(nft_to_burn)}
+    <button class="mint-button" on:click={() => sdk.burnNFT(nft_to_burn)}
       >Burn NFT</button
     >
     <div class="input-burn">
@@ -284,12 +183,6 @@
       />
       Select ID of your NFT to burn
     </div>
-    <!-- <input
-      type="number"
-      bind:value={nft_to_burn}
-      class=" mint-button cube-input"
-    />
-    Select ID of your NFT to burn -->
   </div>
 
   <p class="small">
@@ -306,15 +199,19 @@
   }
 
   .mint-block {
+    max-width: 1200px;
     margin-top: 20px;
     display: flex;
     margin-bottom: 30px;
     justify-content: space-around;
+    margin-left: 8%;
+    margin-right: 8%;
+    flex-wrap: wrap;
   }
 
   .mint-button {
     background-color: rgb(31, 30, 28);
-    min-width: 300px;
+    min-width: 280px;
     border: none;
     color: white;
     padding: 15px 32px;
@@ -337,7 +234,7 @@
 
   main {
     color: white;
-    padding: 50px;
+    padding: 30px 50px;
     max-width: 1200px;
     margin: auto;
   }
@@ -437,6 +334,10 @@
     max-width: 90%;
   }
 
+  .cMFuDJ {
+    max-width: 400px;
+  }
+
   @media screen and (min-width: 600px) {
     header {
       grid-template-columns: 50% 1fr;
@@ -459,7 +360,7 @@
   }
 
   .showcase {
-    z-index: 99;
+    z-index: 2;
     max-width: min(280px, 80vw);
     margin: auto;
   }
