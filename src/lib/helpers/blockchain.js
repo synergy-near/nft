@@ -1,19 +1,7 @@
-import {
-    EthereumClient,
-    modalConnectors,
-    walletConnectProvider,
-} from "@web3modal/ethereum";
-import { ClientCtrl, ConfigCtrl } from "@web3modal/core";
-import { chain, configureChains, createClient } from "@wagmi/core";
-import { BigNumber } from "ethers";
-// import * as wagmi from "@wagmi";
-import Amount from "./amount";
-import RgldABI from "./RGLD.json";
-
 import Web3Modal from 'web3modal';
 import { ethers } from 'ethers';
 
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
 
 const NftContractAddress = "TSXNN3fFvM5jvQ28HVzMHfrLCsUjDBfgVG";
 const RgldAddress = "0x203583737BEFABf17587c363F7ea27f3E3379e2B"
