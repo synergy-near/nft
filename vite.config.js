@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
-// import mkcert from 'vite-plugin-mkcert'
+import mkcert from 'vite-plugin-mkcert'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
   };
 
   return {
-    plugins: [svelte(), htmlPlugin()],
+    plugins: [svelte(), htmlPlugin(), mkcert()],
     server: {
       https: true,
       watch: {

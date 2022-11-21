@@ -1,10 +1,10 @@
 import { ethers, BigNumber } from 'ethers';
 
-const RgldAddress = "0x203583737BEFABf17587c363F7ea27f3E3379e2B";
+const RgldAddress = "0x976F6A26e5A05bf07296615F3520D9E71B254875";
 import RgldABI from "./RGLD.json";
 
 
-const NftAddress = "0xbBC46A8A0F9CC30288ed332535d301335869267b"
+const NftAddress = "0x70Ded164D82a87B3253Ed8ef18d0E6a582912143"
 import NftABI from "./NFT.json"
 
 
